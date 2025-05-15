@@ -39,7 +39,7 @@ def transription(mp3_path, model_size="base"):
 
 if __name__ == "__main__":
     if len(sys.argv) < 2:
-        print("Usage: transcription.py /samles/tst_video.mp3")
+        print("Usage: transcription.py tst_video.mp3")
         sys.exit(1)
     
     file = sys.argv[1]
