@@ -16,7 +16,7 @@ def transription(mp3_path, model_size="base"):
     result = model.transcribe(mp3_path, verbose=True)
 
     #SAVE TO FILE
-    text_output = os.path.splitext(mp3_path)[0] = ".txt"
+    text_output = os.path.splitext(mp3_path)[0] + ".txt"
     with open(text_output, "w", encoding="utf-8") as f:
         f.write(result["text"])
     print (f"Transcription is saved to file: {text_output}")
