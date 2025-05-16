@@ -51,11 +51,17 @@ resource "aws_instance" "ec2" {
   key_name                    = "EC2KeyPair"
   associate_public_ip_address = true
   subnet_id                   = aws_subnet.cluepr_poc_public_subnet.id
+   root_block_device {
+    volume_size = 32
+    volume_type = "ebs"
+    encrypted = true
+  }
   vpc_security_group_ids = [
     aws_security_group.allow_ssh.id,
     aws_security_group.allow_http.id,
     aws_security_group.allow_https.id,
   aws_security_group.allow_flask.id]
+
 
   tags = {
     Name = element(var.instance_tags, count.index)
