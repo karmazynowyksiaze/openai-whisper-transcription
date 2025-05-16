@@ -49,7 +49,7 @@ def transription(audio_path, model_size="medium"):
 
 @app.route("/", methods=["GET", "POST"])
 def index():
-    transription = None
+    transcription_text = None
     download_link = None
     srt_link = None
     if request.method == "POST":
@@ -58,13 +58,13 @@ def index():
         path = os.path.join(UPLOAD_FOLDER, filename)
         file.save(path)
 
-        transription, txt_filename, srt_filename = transription(path)
+        transcription_text, txt_filename, srt_filename = transription(path)
 
-        if transription:
+        if transcription_text:
             download_link = f"/download/{txt_filename}"
             srt_link = f"/download/{srt_filename}"
 
-    return render_template("index.html", transription=transription, download_link=download_link, srt_link=srt_link)
+    return render_template("index.html", transcription=transcription_text, download_link=download_link, srt_link=srt_link)
 
 @app.route("/download/<filename>")
 def download(filename):
