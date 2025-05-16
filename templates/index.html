@@ -1,31 +1,520 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="pl">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>CluePR PoC - Transkrypcja audio</title>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+    <title>CluePR - Transkrypcja Audio</title>
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --primary-color: #4361ee;
+            --primary-hover: #3a56d4;
+            --secondary-color: #4cc9f0;
+            --bg-color: #f8f9fa;
+            --card-bg: #ffffff;
+            --text-primary: #333333;
+            --text-secondary: #6c757d;
+            --success-color: #28a745;
+            --border-radius: 12px;
+            --box-shadow: 0 8px 30px rgba(0, 0, 0, 0.12);
+            --transition: all 0.3s ease;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Montserrat', sans-serif;
+            background: var(--bg-color);
+            color: var(--text-primary);
+            line-height: 1.6;
+            padding: 20px;
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .container {
+            width: 100%;
+            max-width: 800px;
+            background: var(--card-bg);
+            border-radius: var(--border-radius);
+            box-shadow: var(--box-shadow);
+            padding: 40px;
+            margin: 20px auto;
+            transition: var(--transition);
+        }
+
+        .header {
+            text-align: center;
+            margin-bottom: 40px;
+        }
+
+        .logo {
+            font-size: 28px;
+            font-weight: 700;
+            margin-bottom: 8px;
+            color: var(--primary-color);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .logo-icon {
+            margin-right: 12px;
+            font-size: 32px;
+        }
+
+        h1 {
+            font-size: 24px;
+            font-weight: 600;
+            color: var(--text-primary);
+            margin-bottom: 10px;
+        }
+
+        h3 {
+            font-size: 18px;
+            font-weight: 600;
+            color: var(--text-primary);
+            margin-bottom: 15px;
+        }
+
+        .subtitle {
+            color: var(--text-secondary);
+            font-size: 16px;
+            font-weight: 400;
+        }
+
+        .upload-container {
+            margin: 30px 0;
+            text-align: center;
+        }
+
+        .file-input-wrapper {
+            position: relative;
+            margin-bottom: 30px;
+            display: inline-block;
+            width: 100%;
+            max-width: 500px;
+        }
+
+        .file-input {
+            opacity: 0;
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            cursor: pointer;
+            z-index: 2;
+        }
+
+        .file-input-label {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            padding: 30px;
+            border: 2px dashed #d1d5db;
+            border-radius: var(--border-radius);
+            background-color: #f9fafb;
+            transition: var(--transition);
+            cursor: pointer;
+        }
+
+        .file-input-label:hover {
+            border-color: var(--primary-color);
+            background-color: rgba(67, 97, 238, 0.05);
+        }
+
+        .file-input-icon {
+            font-size: 40px;
+            color: var(--primary-color);
+            margin-bottom: 15px;
+        }
+
+        .file-name {
+            margin-top: 15px;
+            font-size: 14px;
+            color: var(--text-secondary);
+            word-break: break-all;
+        }
+
+        .btn {
+            display: inline-block;
+            background: var(--primary-color);
+            color: white;
+            border: none;
+            border-radius: 8px;
+            padding: 12px 24px;
+            font-size: 16px;
+            font-weight: 500;
+            cursor: pointer;
+            transition: var(--transition);
+            text-align: center;
+            width: 100%;
+            max-width: 300px;
+        }
+
+        .btn:hover {
+            background: var(--primary-hover);
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(67, 97, 238, 0.3);
+        }
+
+        .btn:disabled {
+            background: #a0a0a0;
+            cursor: not-allowed;
+        }
+
+        .output {
+            margin-top: 40px;
+            background: #f1f3f9;
+            padding: 25px;
+            border-radius: var(--border-radius);
+            white-space: pre-wrap;
+            font-family: 'Courier New', monospace;
+            border-left: 4px solid var(--primary-color);
+            max-height: 400px;
+            overflow-y: auto;
+        }
+
+        .output p {
+            line-height: 1.6;
+        }
+
+        .progress-container {
+            margin: 30px auto;
+            max-width: 400px;
+        }
+
+        .progress-bar {
+            height: 8px;
+            background-color: #e9ecef;
+            border-radius: 4px;
+            overflow: hidden;
+            margin-bottom: 10px;
+        }
+
+        .progress {
+            height: 100%;
+            background-color: var(--primary-color);
+            width: 0%;
+            transition: width 0.3s ease;
+        }
+
+        .progress-status {
+            text-align: center;
+            margin-top: 5px;
+            font-size: 14px;
+            color: var(--text-secondary);
+        }
+
+        .footer {
+            margin-top: 40px;
+            text-align: center;
+            color: var(--text-secondary);
+            font-size: 14px;
+        }
+
+        .download-links {
+            display: flex;
+            justify-content: center;
+            gap: 20px;
+            flex-wrap: wrap;
+            margin-top: 20px;
+        }
+
+        .download-btn {
+            background-color: var(--success-color);
+            color: white;
+            text-decoration: none;
+            padding: 10px 20px;
+            border-radius: 6px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            font-weight: 500;
+            transition: var(--transition);
+        }
+
+        .download-btn:hover {
+            background-color: #218838;
+            transform: translateY(-2px);
+        }
+
+        .links {
+            margin-top: 25px;
+            text-align: center;
+        }
+
+        .links a {
+            display: inline-block;
+            margin: 0 10px;
+            color: var(--primary-color);
+            text-decoration: none;
+            font-weight: 500;
+            transition: var(--transition);
+        }
+
+        .links a:hover {
+            color: var(--primary-hover);
+            text-decoration: underline;
+        }
+
+        .status-message {
+            padding: 15px;
+            margin: 20px 0;
+            border-radius: var(--border-radius);
+            font-weight: 500;
+            text-align: center;
+        }
+
+        .success {
+            background-color: rgba(40, 167, 69, 0.1);
+            color: #28a745;
+            border: 1px solid rgba(40, 167, 69, 0.2);
+        }
+
+        .loading {
+            background-color: rgba(67, 97, 238, 0.1);
+            color: var(--primary-color);
+            border: 1px solid rgba(67, 97, 238, 0.2);
+        }
+
+        /* Loading overlay */
+        .overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(255, 255, 255, 0.8);
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            z-index: 1000;
+            opacity: 0;
+            visibility: hidden;
+            transition: all 0.3s ease;
+        }
+
+        .overlay.active {
+            opacity: 1;
+            visibility: visible;
+        }
+
+        .spinner {
+            width: 50px;
+            height: 50px;
+            border: 5px solid rgba(67, 97, 238, 0.2);
+            border-left-color: var(--primary-color);
+            border-radius: 50%;
+            margin-bottom: 20px;
+            animation: spin 1s linear infinite;
+        }
+
+        .overlay-text {
+            font-size: 18px;
+            font-weight: 500;
+            color: var(--primary-color);
+            margin-top: 15px;
+            text-align: center;
+        }
+
+        /* Responsive adjustments */
+        @media (max-width: 768px) {
+            .container {
+                padding: 30px 20px;
+            }
+            
+            h1 {
+                font-size: 22px;
+            }
+            
+            .file-input-label {
+                padding: 20px;
+            }
+
+            .download-links {
+                flex-direction: column;
+                align-items: center;
+            }
+        }
+
+        /* Animations */
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+
+        .fade-in {
+            animation: fadeIn 0.5s ease-in;
+        }
+
+        @keyframes spin {
+            to { transform: rotate(360deg); }
+        }
+    </style>
 </head>
 <body>
-<div class="container">
-    <h1>Transkrypcja Audio/Wideo</h1>
-    <form method="post" enctype="multipart/form-data">
-        <input type="file" name="file" required>
-        <br>
-        <button type="submit">Rozpocznij transkrypcję</button>
-    </form>
+    <div class="container fade-in">
+        <div class="header">
+            <div class="logo">
+                <span class="logo-icon">🎙️</span>
+                <span>ClueRPR</span>
+            </div>
+            <h1>Transkrypcja Audio</h1>
+            <p class="subtitle">Transkrypcja plików audio i video</p>
+        </div>
 
-    {% if transcription %}
-        <div class="output">
-            <h3>Wynik transkrypcji:</h3>
-            <p>{{ transcription }}</p>
+        {% if transcription %}
+            <div class="status-message success">
+                Transkrypcja zakończona pomyślnie!
+            </div>
+            
+            <div class="output">
+                <h3>Wynik transkrypcji:</h3>
+                <p>{{ transcription }}</p>
+            </div>
+            
+            <div class="download-links">
+                <a href="{{ download_link }}" class="download-btn">
+                    <span>📄</span> Pobierz plik .txt
+                </a>
+                <a href="{{ srt_link }}" class="download-btn">
+                    <span>🎬</span> Pobierz plik .srt
+                </a>
+            </div>
+            
+            <div style="text-align: center; margin-top: 30px;">
+                <a href="/" class="btn">Nowa transkrypcja</a>
+            </div>
+        {% else %}
+            <form method="post" enctype="multipart/form-data" class="upload-container" id="transcription-form">
+                <div class="file-input-wrapper">
+                    <input type="file" id="audio-file" name="file" class="file-input" accept="audio/*,video/*" required>
+                    <label for="audio-file" class="file-input-label">
+                        <span class="file-input-icon">📁</span>
+                        <span>Przeciągnij i upuść plik lub kliknij, aby wybrać plik</span>
+                        <span class="file-name" id="file-name">Nie wybrano pliku</span>
+                    </label>
+                </div>
+                
+                <button type="submit" class="btn" id="transcribe-btn" disabled>Rozpocznij transkrypcję</button>
+            </form>
+
+            <div class="progress-container" id="progress-container" style="display: none;">
+                <div class="progress-bar">
+                    <div class="progress" id="progress-bar"></div>
+                </div>
+                <div class="progress-status" id="progress-status">Przygotowanie do przetwarzania...</div>
+            </div>
+        {% endif %}
+
+        <div class="footer">
+            <p>Panowie.IT</p>
         </div>
-        <div class="links">
-            <a href="{{ download_link }}">Pobierz plik .txt</a>
-            <a href="{{ srt_link }}">Pobierz plik .srt</a>
-        </div>
-    {% endif %}
-</div>
+    </div>
+
+    <!-- Loading overlay -->
+    <div class="overlay" id="loading-overlay">
+        <div class="spinner"></div>
+        <div class="overlay-text">Trwa przetwarzanie pliku...</div>
+        <p class="overlay-text" style="font-size: 14px; margin-top: 5px;">To może potrwać kilka minut</p>
+    </div>
+
+    <script>
+        // File selection handling
+        const fileInput = document.getElementById('audio-file');
+        const fileName = document.getElementById('file-name');
+        const transcribeBtn = document.getElementById('transcribe-btn');
+        const form = document.getElementById('transcription-form');
+        const loadingOverlay = document.getElementById('loading-overlay');
+        
+        if (fileInput) {
+            fileInput.addEventListener('change', function() {
+                if (this.files && this.files[0]) {
+                    fileName.textContent = this.files[0].name;
+                    transcribeBtn.disabled = false;
+                } else {
+                    fileName.textContent = 'Nie wybrano pliku';
+                    transcribeBtn.disabled = true;
+                }
+            });
+
+            // Drag and drop functionality
+            const dropArea = document.querySelector('.file-input-label');
+
+            ['dragenter', 'dragover', 'dragleave', 'drop'].forEach(eventName => {
+                dropArea.addEventListener(eventName, preventDefaults, false);
+            });
+
+            function preventDefaults(e) {
+                e.preventDefault();
+                e.stopPropagation();
+            }
+
+            ['dragenter', 'dragover'].forEach(eventName => {
+                dropArea.addEventListener(eventName, highlight, false);
+            });
+
+            ['dragleave', 'drop'].forEach(eventName => {
+                dropArea.addEventListener(eventName, unhighlight, false);
+            });
+
+            function highlight() {
+                dropArea.style.borderColor = '#4361ee';
+                dropArea.style.backgroundColor = 'rgba(67, 97, 238, 0.05)';
+            }
+
+            function unhighlight() {
+                dropArea.style.borderColor = '#d1d5db';
+                dropArea.style.backgroundColor = '#f9fafb';
+            }
+
+            dropArea.addEventListener('drop', handleDrop, false);
+
+            function handleDrop(e) {
+                const dt = e.dataTransfer;
+                const files = dt.files;
+                
+                if (files && files[0]) {
+                    fileInput.files = files;
+                    fileName.textContent = files[0].name;
+                    transcribeBtn.disabled = false;
+                }
+            }
+
+            // Form submission handling
+            if (form) {
+                form.addEventListener('submit', function(e) {
+                    // Show loading overlay when form is submitted
+                    loadingOverlay.classList.add('active');
+                    // Disable submit button
+                    transcribeBtn.disabled = true;
+                    transcribeBtn.textContent = 'Przetwarzanie...';
+                });
+            }
+        }
+
+        // Handle page reload with browser back button
+        window.addEventListener('pageshow', function(event) {
+            if (event.persisted) {
+                // Page was restored from the bfcache
+                loadingOverlay.classList.remove('active');
+                if (transcribeBtn) {
+                    transcribeBtn.disabled = false;
+                    transcribeBtn.textContent = 'Rozpocznij transkrypcję';
+                }
+            }
+        });
+    </script>
 </body>
 </html>
