@@ -55,7 +55,7 @@ resource "aws_instance" "ec2" {
     aws_security_group.allow_ssh.id,
     aws_security_group.allow_http.id,
     aws_security_group.allow_https.id,
-    aws_security_group.allow_flask.id]
+  aws_security_group.allow_flask.id]
 
   tags = {
     Name = element(var.instance_tags, count.index)

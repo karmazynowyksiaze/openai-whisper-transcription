@@ -1,7 +1,7 @@
 resource "aws_security_group" "allow_ssh" {
   name        = "allow_ssh"
   description = "Allow SSH traffic"
-  vpc_id      = aws_vpc.glpi_vpc.id
+  vpc_id      = aws_vpc.cluepr_poc_vpc.id
   ingress {
     description = "SSH"
     from_port   = 22
@@ -20,7 +20,7 @@ resource "aws_security_group" "allow_ssh" {
 resource "aws_security_group" "allow_http" {
   name        = "allow_http"
   description = "Allow HTTP traffic"
-  vpc_id      = aws_vpc.glpi_vpc.id
+  vpc_id      = aws_vpc.cluepr_poc_vpc.id
   ingress {
     description = "HTTP"
     from_port   = 80
@@ -39,7 +39,7 @@ resource "aws_security_group" "allow_http" {
 resource "aws_security_group" "allow_https" {
   name        = "allow_https"
   description = "Allow HTTPS traffic"
-  vpc_id      = aws_vpc.glpi_vpc.id
+  vpc_id      = aws_vpc.cluepr_poc_vpc.id
   ingress {
     description = "HTTPS"
     from_port   = 443
@@ -58,7 +58,7 @@ resource "aws_security_group" "allow_https" {
 resource "aws_security_group" "allow_flask" {
   name        = "allow_flask"
   description = "Allow Flask traffic"
-  vpc_id      = aws_vpc.glpi_vpc.id
+  vpc_id      = aws_vpc.cluepr_poc_vpc.id
   ingress {
     description = "Jenkins"
     from_port   = 5000
