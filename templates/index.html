@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CluePR PoC - Transkrypcja audio</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+</head>
+<body>
+<div class="container">
+    <h1>Transkrypcja Audio/Wideo</h1>
+    <form method="post" enctype="multipart/form-data">
+        <input type="file" name="file" required>
+        <br>
+        <button type="submit">Rozpocznij transkrypcję</button>
+    </form>
+
+    {% if transcription %}
+        <div class="output">
+            <h3>Wynik transkrypcji:</h3>
+            <p>{{ transcription }}</p>
+        </div>
+        <div class="links">
+            <a href="{{ download_link }}">Pobierz plik .txt</a>
+            <a href="{{ srt_link }}">Pobierz plik .srt</a>
+        </div>
+    {% endif %}
+</div>
+</body>
+</html>

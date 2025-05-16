@@ -1,0 +1,5 @@
+Flask
+openai-whisper
+srt
+torch
+ffmpeg-python
