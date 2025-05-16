@@ -11,7 +11,7 @@ OUTPUT_FOLDER="outputs"
 os.makedirs(UPLOAD_FOLDER, exist_ok=True)
 os.makedirs(UPLOAD_FOLDER, exist_ok=True)
 
-def transription(audio_path, model_size="medium"):
+def transription(audio_path, model_size="small"):
     if not os.path.isfile(audio_path):
         print(f"File doesn't exist: {audio_path}")
         return None, None, None
