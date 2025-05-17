@@ -6,6 +6,7 @@ import whisper
 from datetime import timedelta
 import srt
 import sys
+import logging
 
 app = Flask(__name__)
 
@@ -20,6 +21,9 @@ os.makedirs(app.config['OUTPUT_FOLDER'], exist_ok=True)
 
 os.makedirs(UPLOAD_FOLDER, exist_ok=True)
 os.makedirs(UPLOAD_FOLDER, exist_ok=True)
+
+logging.basicConfig(filename='app.log', level=logging.DEBUG)
+app.logger.info('App is started')
 
 def transription(audio_path, model_size="small"):
     if not os.path.isfile(audio_path):

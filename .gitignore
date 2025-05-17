@@ -1,6 +1,8 @@
 /models/medium.pt
 /venv
 __pycache__/
+app.log
+
 
 **/terraform.tfstate
 **/terraform.tfstate.backup
