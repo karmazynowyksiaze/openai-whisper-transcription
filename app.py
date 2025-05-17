@@ -82,7 +82,7 @@ def sanitize_filename(filename):
 @app.route('/download/<filename>')
 def download_file(filename):
     try:
-        file_path = os.path.join(app.config['UPLOAD_FOLDER'], filename)
+        file_path = os.path.join(app.config['OUTPUT_FOLDER'], filename)
         if os.path.exists(file_path):
             return send_file(
                 file_path,
