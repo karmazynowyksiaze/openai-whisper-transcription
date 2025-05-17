@@ -1,4 +1,4 @@
-from flask import Flask, request, render_template, send_from_directory
+from flask import Flask, render_template, request, redirect, url_for, send_file
 import os
 import whisper
 from datetime import timedelta
@@ -66,9 +66,21 @@ def index():
 
     return render_template("index.html", transcription=transcription_text, download_link=download_link, srt_link=srt_link)
 
-@app.route("/download/<filename>")
-def download(filename):
-    return send_from_directory(OUTPUT_FOLDER, filename)
+@app.route('/download/<filename>')
+def download_file(filename):
+    try:
+        file_path = os.path.join(app.config['UPLOAD_FOLDER'], filename)
+        if os.path.exists(file_path):
+            return send_file(
+                file_path,
+                as_attachment=True,
+                download_name=filename,
+                mimetype='text/plain'
+            )
+        else:
+            return "Plik nie istnieje", 404
+    except Exception as e:
+        return f"Wystąpił błąd: {str(e)}", 500
 
 if __name__ == "__main__":
     app.run(host='0.0.0.0', debug=True)
