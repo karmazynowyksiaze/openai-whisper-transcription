@@ -66,7 +66,7 @@ Aplikacja jest dostępna pod adresem: [http://51.20.108.26](http://51.20.108.26)
 
 2. Instalacja wymaganych pakietów:
    ```bash
-   apt install nginx git python python3-venv -y
+   apt install nginx git python python3-venv ffmpeg -y
    ```
 
 3. Przygotowanie katalogu do aplikacji:
