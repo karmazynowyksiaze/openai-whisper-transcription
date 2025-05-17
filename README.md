@@ -7,8 +7,9 @@
 </p>
 
 A simple web application for transcribing audio files using OpenAI's Whisper model. Upload audio files and get text transcriptions easily.
+Prosta aplikacja Webowa do transkrypcji plików audio w formacie mp3 lub mp4. Wykorzystano model OpenAI Whisper. 
 
-## Features
+## Wlasciwosci
 
 - ✅ Audio file upload and transcription
 - ✅ Text file download
@@ -18,78 +19,77 @@ A simple web application for transcribing audio files using OpenAI's Whisper mod
 
 ## Demo
 
-The application is currently available at: [http://51.20.108.26](http://51.20.108.26)
+Aplikacja jest dostępna pod adresem: [http://51.20.108.26](http://51.20.108.26)
 
-## Table of Contents
+## Spis treści
 
-- [Local Installation](#local-installation)
-- [Server Deployment](#server-deployment)
-- [Reverse Proxy Configuration](#reverse-proxy-configuration)
-- [Troubleshooting](#troubleshooting)
-- [License](#license)
+- [Instalacja lokalna](#instalacja-lokalna)
+- [Wdrożenie na serwerze (Dystrubucja Ubuntu)](#server-deployment)
+- [Konfiguracja Reverse Proxy](#reverse-proxy-configuration)
+- [Warunki licencyjne](#license)
 
-## Local Installation
+## Instalacja lokalna
 
-1. Clone the repository:
+1. Pobieranie repozytorium
    ```bash
    git clone https://github.com/karmazynowyksiaze/openai-whisper-transcription.git
    cd openai-whisper-transcription
    ```
 
-2. Open command prompt in the downloaded repository directory
+2. Otwórz CMD w katalogu pobranego repozytorium
 
-3. Update pip:
+3. Aktualizacja pip:
    ```bash
    pip install --upgrade pip
    ```
 
-4. Install dependencies:
+4. Instalacja bibliotek:
    ```bash
    pip install -r requirements.txt
    ```
 
-5. Run the application:
+5. Uruchomienie aplikacji:
    ```bash
    flask run
    ```
 
-6. Access the application in your browser:
+6. Dostęp do aplikacji w przeglądarce:
    ```
    http://127.0.0.1:5000
    ```
 
 ## Server Deployment
 
-1. Update and upgrade packages:
+1. Aktualizacja zainstalowanych pakietów w systemie:
    ```bash
    apt update && apt upgrade
    ```
 
-2. Install required packages:
+2. Instalacja wymaganych pakietów:
    ```bash
    apt install nginx git python python3-venv -y
    ```
 
-3. Create and prepare application directory:
+3. Przygotowanie katalogu do aplikacji:
    ```bash
    mkdir /app/
    chmod a+rwx /app
    cd /app
    ```
 
-4. Clone the repository:
+4. Pobieranie repozytorium:
    ```bash
    git clone https://github.com/karmazynowyksiaze/openai-whisper-transcription.git
    cd openai-whisper-transcription
    ```
 
-5. Set up Python virtual environment:
+5. Ustawienie wirtualnego środowiska Python:
    ```bash
    python3 -m venv whisperenv
    source whisperenv/bin/activate
    ```
 
-6. Install dependencies and run:
+6. Instalacja wymaganych bibliotek oraz uruchomienie aplikacji:
    ```bash
    pip install -r requirements.txt
    flask run
@@ -97,67 +97,23 @@ The application is currently available at: [http://51.20.108.26](http://51.20.10
 
 ## Reverse Proxy Configuration
 
-1. Copy the Nginx configuration file:
+1. Utworzenie pliku konfiguracyjnego nginx:
    ```bash
    cp /app/openai-whisper-transcription/nginx-reverseproxy_flask.conf /etc/nginx/sites-available/
    ```
 
-2. Enable the site:
+2. Uruchomienie reverse proxy:
    ```bash
    sudo ln -s /etc/nginx/sites-available/nginx-reverseproxy_flask.conf /etc/nginx/sites-enabled/
    ```
 
-3. Restart Nginx:
+3. Restart nginx:
    ```bash
    sudo systemctl restart nginx
    ```
+## Licencja
 
-## Troubleshooting
-
-### 413 Request Entity Too Large
-
-If you encounter this error when uploading large files, you need to modify the Nginx configuration:
-
-1. Open your Nginx configuration file:
-   ```bash
-   sudo nano /etc/nginx/sites-available/nginx-reverseproxy_flask.conf
-   ```
-
-2. Add or modify the following line in the server block:
-   ```
-   client_max_body_size 100M;  # Adjust size as needed
-   ```
-
-3. Restart Nginx:
-   ```bash
-   sudo systemctl restart nginx
-   ```
-
-### File Download Issues
-
-If files are displayed in the browser instead of being downloaded:
-
-1. Make sure your download routes are properly configured with correct headers:
-   ```python
-   @app.route('/download/<filename>')
-   def download_file(filename):
-       file_path = os.path.join(app.config['UPLOAD_FOLDER'], filename)
-       return send_file(
-           file_path,
-           as_attachment=True,
-           download_name=filename,
-           mimetype='text/plain'
-       )
-   ```
-
-2. Ensure all required imports are present:
-   ```python
-   from flask import send_file
-   ```
-
-## License
-
-This project is licensed under the MIT License - see the LICENSE file for details.
+Ten projekt jest dostępny na licencji MIT
 
 ## Acknowledgements
 
