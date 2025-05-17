@@ -6,16 +6,15 @@
   <img src="https://img.shields.io/badge/python-3.8+-yellow" alt="Python version">
 </p>
 
-A simple web application for transcribing audio files using OpenAI's Whisper model. Upload audio files and get text transcriptions easily.
 Prosta aplikacja Webowa do transkrypcji plików audio w formacie mp3 lub mp4. Wykorzystano model OpenAI Whisper. 
 
-## Wlasciwosci
+## Własciwosci
 
-- ✅ Audio file upload and transcription
-- ✅ Text file download
-- ✅ Clean, user-friendly interface
-- ✅ Support for various audio formats
-- ✅ Easy deployment options
+- ✅ Przesyłanie i transkrypcja plików audio
+- ✅ Pobieranie plików tekstowych
+- ✅ Przejrzysty, przyjazny dla użytkownika interfejs
+- ✅ Obsługa różnych formatów audio
+- ✅ Łatwe opcje wdrażania
 
 ## Demo
 
@@ -26,7 +25,7 @@ Aplikacja jest dostępna pod adresem: [http://51.20.108.26](http://51.20.108.26)
 - [Instalacja lokalna](#instalacja-lokalna)
 - [Wdrożenie na serwerze (Dystrubucja Ubuntu)](#server-deployment)
 - [Konfiguracja Reverse Proxy](#reverse-proxy-configuration)
-- [Warunki licencyjne](#license)
+- [Warunki licencyjne](#licencja)
 
 ## Instalacja lokalna
 
