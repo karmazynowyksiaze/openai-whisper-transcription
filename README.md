@@ -6,7 +6,7 @@
   <img src="https://img.shields.io/badge/python-3.8+-yellow" alt="Python version">
 </p>
 
-Prosta aplikacja Webowa do transkrypcji plików audio w formacie mp3 lub mp4. Wykorzystano model OpenAI Whisper. 
+Prosta aplikacja webowa do transkrypcji plików audio w formacie mp3 lub mp4. Wykorzystano model OpenAI Whisper. 
 
 ## Własciwosci
 
