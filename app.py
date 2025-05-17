@@ -1,4 +1,6 @@
 from flask import Flask, render_template, request, redirect, url_for, send_file
+from werkzeug.utils import secure_filename
+import urllib.parse
 import os
 import whisper
 from datetime import timedelta
@@ -6,8 +8,16 @@ import srt
 import sys
 
 app = Flask(__name__)
+
 UPLOAD_FOLDER="uploads"
 OUTPUT_FOLDER="outputs"
+
+app.config['UPLOAD_FOLDER'] = 'uploads'
+app.config['OUTPUT_FOLDER'] = 'outputs'
+
+os.makedirs(app.config['UPLOAD_FOLDER'], exist_ok=True)
+os.makedirs(app.config['OUTPUT_FOLDER'], exist_ok=True)
+
 os.makedirs(UPLOAD_FOLDER, exist_ok=True)
 os.makedirs(UPLOAD_FOLDER, exist_ok=True)
 
@@ -66,10 +76,13 @@ def index():
 
     return render_template("index.html", transcription=transcription_text, download_link=download_link, srt_link=srt_link)
 
+def sanitize_filename(filename):
+    return secure_filename(filename)
+
 @app.route('/download/<filename>')
 def download_file(filename):
     try:
-        file_path = os.path.join(app.config['OUTPUT_FOLDER'], filename)
+        file_path = os.path.join(app.config['UPLOAD_FOLDER'], filename)
         if os.path.exists(file_path):
             return send_file(
                 file_path,
@@ -78,8 +91,9 @@ def download_file(filename):
                 mimetype='text/plain'
             )
         else:
-            return "Plik nie istnieje", 404
+            return f"Plik nie istnieje: {file_path}", 404
     except Exception as e:
+        app.logger.error(f"Błąd podczas pobierania pliku: {e}")
         return f"Wystąpił błąd: {str(e)}", 500
 
 if __name__ == "__main__":
