@@ -18,7 +18,7 @@ Prosta aplikacja webowa do transkrypcji plików audio w formacie mp3 lub mp4. Wy
 
 ## Demo
 
-Aplikacja jest dostępna pod adresem: [http://51.20.108.26](http://51.20.108.26)
+Aplikacja jest dostępna pod adresem: [http://16.170.183.185/](http://16.170.183.185/)
 
 ## Spis treści
 
